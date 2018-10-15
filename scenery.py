@@ -13,19 +13,14 @@ class Background(pg.sprite.Sprite):
         self.rect.x = 0
         self.rect.y = 0
         self.scroll = False
-        self.debug = False
 
     def update(self):
-        if self.scroll and not self.game.thor.standStill:
-            if self.game.thor.moveLeft:
-                if self.debug:
-                    print(str('scrollleft'))
+        if self.scroll and self.game.thor.ctrl.standLock:
+            if self.game.thor.ctrl.moveLeft:
                 self.rect.x += 2
                 for enemy in self.game.enemies:
                     enemy.rect.x += 2
             else:
-                if self.debug:
-                    print(str('scrollright'))
                 self.rect.x -= 2
                 for enemy in self.game.enemies:
                     enemy.rect.x -= 2

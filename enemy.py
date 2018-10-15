@@ -28,7 +28,3 @@ class Enemy(pg.sprite.Sprite):
         if self.die:
             self.kill()
             self.game.enemyCount += 1
-
-        # center = self.rect.center
-        # self.rect = self.image.get_rect()
-        # self.rect.center = center

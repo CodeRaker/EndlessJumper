@@ -2,7 +2,7 @@ import pygame as pg
 from settings import *
 from player import *
 from enemy import *
-from scenery import *
+from scenery import Background
 from gamestats import *
 from colorpalette import *
 
@@ -42,12 +42,13 @@ class Game:
         enemy_collisions = pg.sprite.spritecollide(self.thor, self.enemies, False, pg.sprite.collide_mask)
         if enemy_collisions:
             for e in enemy_collisions:
-                if self.thor.attack:
+                if self.thor.ctrl.attacking:
                     e.kill()
                     self.enemy = Enemy(self)
-                if e.cooldown == 0:
-                    self.thor.health -= 5
+                elif e.cooldown == 0:
+                    self.thor.ctrl.health -= 5
                     e.cooldown = 100
+        print(str(self.thor.ctrl.standing))
 
     def draw(self):
         self.all_sprites.draw(self.screen)
