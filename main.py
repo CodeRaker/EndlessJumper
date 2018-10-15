@@ -1,6 +1,9 @@
 import pygame as pg
 from settings import *
 from player import *
+from enemy import *
+from scenery import *
+from gamestats import *
 from colorpalette import *
 
 class Game:
@@ -17,7 +20,12 @@ class Game:
 
     def loadAssets(self):
         self.all_sprites = pg.sprite.LayeredUpdates()
+        self.enemies = pg.sprite.Group()
         self.thor = Thor(self)
+        self.background = Background(self)
+        self.enemy = Enemy(self)
+        self.gamestats = Gamestats(self)
+        self.healthbar = HealthBar(self)
 
 
     def events(self):
@@ -27,12 +35,21 @@ class Game:
 
             if event.type == pg.KEYDOWN and event.key == pg.K_v:
                 self.thor.debug = not self.thor.debug
+                self.background.debug = not self.background.debug
 
     def update(self):
         self.all_sprites.update()
+        enemy_collisions = pg.sprite.spritecollide(self.thor, self.enemies, False, pg.sprite.collide_mask)
+        if enemy_collisions:
+            for e in enemy_collisions:
+                if self.thor.attack:
+                    e.kill()
+                    self.enemy = Enemy(self)
+                if e.cooldown == 0:
+                    self.thor.health -= 5
+                    e.cooldown = 100
 
     def draw(self):
-        self.screen.fill(self.rgb.gray)
         self.all_sprites.draw(self.screen)
 
     def run(self):

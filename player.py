@@ -29,12 +29,6 @@ class Thor(pg.sprite.Sprite):
             image = pg.transform.scale(image, (image.get_width() // 2, image.get_height() // 2))
             self.attack_anim.append(image)
 
-        for i in range(0,7):
-            image = pg.image.load('images/walk/walk' + str(i) + '.png').convert_alpha()
-            image = pg.transform.scale(image, (image.get_width() // 2, image.get_height() // 2))
-            image = pg.transform.flip(image, True, False)
-            self.walk_anim_right.append(image)
-
         self.frameWalk = 0
         self.frameWalkInvert = False
         self.frameAttack = 0
@@ -43,9 +37,8 @@ class Thor(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.mask = pg.mask.from_surface(self.image)
 
-        self.pos = vec(300, 300)
-        self.rect.x = self.pos.x
-        self.rect.y = self.pos.y
+        self.rect.centerx = Width / 2
+        self.rect.y = Height - self.rect.height
 
         self.debug = False
 
@@ -61,13 +54,17 @@ class Thor(pg.sprite.Sprite):
         self.groundLevel = 0
         self.jumpHeight = jumpHeight
 
+        #Player Stats variables
+        self.health = 100
+
 
     def update(self):
         self.getKeys()
 
         #Attack
         if self.attack:
-            print(str('attack'))
+            if self.debug:
+                print(str('attack'))
             self.standStill = False
             if self.game.frameCounter %2 == 0:
                 self.image = self.attack_anim[self.frameAttack]
@@ -85,7 +82,11 @@ class Thor(pg.sprite.Sprite):
                 print(str('moveleft'))
             self.image = self.walk_anim[self.frameWalk]
             self.mask = pg.mask.from_surface(self.image)
-            self.rect.x -= 3
+            if self.rect.centerx > Width * 0.2:
+                self.game.background.scroll = False
+                self.rect.x -= 5
+            else:
+                self.game.background.scroll = True
             self.frameWalk += 1
             if self.frameWalk + 1 > len(self.walk_anim):
                 self.frameWalk = 0
@@ -97,7 +98,11 @@ class Thor(pg.sprite.Sprite):
             self.image = self.walk_anim[self.frameWalk]
             self.image = pg.transform.flip(self.image, True, False)
             self.mask = pg.mask.from_surface(self.image)
-            self.rect.x += 3
+            if self.rect.centerx < Width * 0.8:
+                self.game.background.scroll = False
+                self.rect.x += 5
+            else:
+                self.game.background.scroll = True
             self.frameWalk += 1
             if self.frameWalk + 1 > len(self.walk_anim):
                 self.frameWalk = 0
@@ -106,7 +111,6 @@ class Thor(pg.sprite.Sprite):
         if self.jump:
             if self.debug:
                 print(str('jump'))
-            self.clearMovement()
             if not self.fall:
                 self.rect.y -= 5
             else:
@@ -135,6 +139,9 @@ class Thor(pg.sprite.Sprite):
             if self.frameWalk + 1 > len(self.stand_anim):
                 self.frameWalkInvert = not self.frameWalkInvert
                 self.frameWalk = 0
+
+        if self.health == 0:
+            self.kill()
 
 
 
@@ -172,7 +179,6 @@ class Thor(pg.sprite.Sprite):
         #Attack
         if pressed[pg.K_q]:
             if not self.attack:
-                #self.clearMovement()
                 self.attack = True
 
         #Nothing
