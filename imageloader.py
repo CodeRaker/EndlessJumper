@@ -1,22 +1,24 @@
 import pygame as pg
 
+
 class ImageLoader:
+
     def __init__(self):
         pass
 
-    def LoadImages(self, imageCount, directoryFolder, nameLeavingTrailingNumber, fileExtension, convertAlpha=False):
-        imageList = []
-        for i in range(0,imageCount):
-            if convertAlpha:
-                image = pg.image.load(directoryFolder + nameLeavingTrailingNumber + str(i) + '.' + fileExtension).convert_alpha()
+    def load_images(self, ImageCount, PathLeavingTrailingNumber, FileExtension, ConvertAlpha=False):
+        images = []
+        for i in range(0,ImageCount):
+            if ConvertAlpha:
+                image = pg.image.load(PathLeavingTrailingNumber + str(i) + '.' + FileExtension).convert_alpha()
             else:
-                image = pg.image.load(directoryFolder + nameLeavingTrailingNumber + str(i) + '.' + fileExtension).convert()
-            imageList.append(image)
-        return imageList
+                image = pg.image.load(PathLeavingTrailingNumber + str(i) + '.' + FileExtension).convert()
+            images.append(image)
+        return images
 
-    def ScaleImages(self, imageList):
-        scaledImages = []
-        for image in imageList:
-            scaledImage = pg.transform.scale(image, (image.get_width() // 2, image.get_height() // 2))
-            scaledImages.append(scaledImage)
-        return scaledImages
+    def down_scale_images(self, Images, Amount):
+        scaled_images = []
+        for image in Images:
+            scaled_image = pg.transform.scale(image, (image.get_width() // Amount, image.get_height() // Amount))
+            scaled_images.append(scaled_image)
+        return scaled_images

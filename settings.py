@@ -1,5 +1,5 @@
 #Resolution
-Width = 800
-Height = 600
-jumpHeight = 20
-frameRate = 60
+screen_width = 800
+screen_height = 600
+jump_height = 20
+frame_rate = 60
