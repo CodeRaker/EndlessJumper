@@ -52,7 +52,7 @@ class Game:
                 if self.ctrl.Player.attacking:
                     e.kill()
                     Enemy(self)
-                elif e.cooldown == 0:
+                elif e.cooldown == 0 and self.ctrl.Player.health > 0:
                     self.ctrl.Player.health -= 5
                     e.cooldown = 100
 
