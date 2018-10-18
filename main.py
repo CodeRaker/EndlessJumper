@@ -72,8 +72,9 @@ class Game:
                 self.ctrl.Environment.change_wind(self.frame_rate)
 
     def draw(self):
-        self.Background.draw_background(self.screen)
+        self.Background.draw_background_pre(self.screen)
         self.all_sprites.draw(self.screen)
+        self.Background.draw_background_post(self.screen)
 
     def run(self):
         while self.running:
